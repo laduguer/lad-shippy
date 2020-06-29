@@ -33,16 +33,16 @@ func(repo *Repository) Create(consignment *pb.Consignment) (*pb.Consignment, err
 }
 
 type service struct {
-	repo Repository
+	repo repository
 }
 
 func (s *service) CreateConsignment(ctx context.Context, req *pb.Consignment) (*pb.Response, error) {
 
-	consignment, err = s.repo.Create(req)
+	consignment, err := s.repo.Create(req)
 	if err != nil {
 		return nil, err
 	}
-	return &pb.Response{Created: true, Cosignment: consignment}, nil
+	return &pb.Response{Created: true, Consignment: consignment}, nil
 }
 
 func main() {
@@ -53,7 +53,7 @@ func main() {
 		log.Fatal("failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
-	pb.ResgisterShippingServiceServer(s, &service{repo})
+	pb.RegisterShippingServiceServer(s, &service{repo})
 
 	reflection.Register(s)
 
